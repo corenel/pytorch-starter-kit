@@ -3,8 +3,8 @@
 import argparse
 import sys
 
+import init_path
 from core import demo, evaluate, train
-from utils import logger
 
 
 def parse_args():
@@ -16,10 +16,6 @@ def parse_args():
                         help="path to image file")
     parser.add_argument("-r", "--restore", type=str, default=None,
                         help="path to model snapshot file")
-    parser.add_argument("-v", "--verbose", help="set log level to debug",
-                        action="store_true")
-    parser.add_argument("-s", "--silent", help="set log level to error",
-                        action="store_true")
     parser.add_argument("-m", "--mode",
                         default="train",
                         const="train",
@@ -34,19 +30,13 @@ if __name__ == '__main__':
     parser = parse_args()
     args = parser.parse_args()
 
-    # set log level
-    if args.verbose:
-        logger.set_level("debug")
-    elif args.silent:
-        logger.set_level("error")
-
     # process
     if args.mode == "train":
-        train(logger)
+        train()
     elif args.mode == "evaluate":
-        evaluate(logger)
+        evaluate()
     elif args.mode == "demo" and args.input is not None:
-        demo(args.input, logger)
+        demo(args.input)
     else:
         parser.print_help()
         sys.exit(1)
